@@ -15,9 +15,15 @@ import {
 function App() {
   const [user, setUser] = useState();
   const [account, setAccount] = useState();
+  const [apiContext, setApiContext] = useState();
+  const baseUrl = '';
 
-  const loginCallback = user => {
+  const loginCallback = (user, loginResponse) => {
     setUser(user);
+    setApiContext({
+        user: user,
+        baseUrl: baseUrl
+    });
   }
 
   const createAccountCallback = account => {
@@ -28,9 +34,9 @@ function App() {
     <div className="App">
       <BookshelfHeader />
         <Router>
-          <Route exact path='/'><Welcome createAccountCallback={createAccountCallback} /></Route>
-          <Route exact path='/home'><Home account={account} /></Route>
-          <Route exact path='/confirm'><VerifyEmail account={account} /></Route>
+          <Route exact path='/'><Welcome createAccountCallback={createAccountCallback} apiContext={apiContext} /></Route>
+          <Route exact path='/home'><Home account={account} apiContext={apiContext} /></Route>
+          <Route exact path='/confirm'><VerifyEmail account={account} loginCallback={loginCallback} apiContext={apiContext} /></Route>
         </Router>      
     </div>
   );
