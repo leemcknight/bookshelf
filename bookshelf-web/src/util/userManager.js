@@ -1,6 +1,6 @@
 const aws = require('aws-sdk');
-const POOL_ID = 'us-west-2_wctTfVt9s';
-const CLIENT_ID = '135npqr2oc2m9s1ihug8pv58di';
+const POOL_ID = 'us-west-2_1jHl1mG9W';
+const CLIENT_ID = '8p8q8f6qtllhdilgmp9gpskl2';
 
 const poolData = {
   UserPoolId: POOL_ID, // Your user pool id here
@@ -10,7 +10,6 @@ const poolData = {
 const userPool = new aws.CognitoIdentityServiceProvider({ region: 'us-west-2' });
 
 const createAccount = async user => {
-  console.log(`createAccount called with : ${JSON.stringify(user)}`);
   var params = {
     ClientId: poolData.ClientId, /* required */
     Password: user.password, /* required */
@@ -39,18 +38,19 @@ const createAccount = async user => {
 };
 
 const confirmAccount = async (userName, confirmationCode) => {
-  return userPool.confirmSignUp({
+  const response = userPool.confirmSignUp({
     ClientId: poolData.ClientId,
     Username: userName,
     ConfirmationCode: confirmationCode
-  });
+  }).promise();
+  return response;
 };
 
 const resendConfirmationCode = async (userName) => {
-    return userPool.resendConfirmationCode({
-        ClientId: poolData.ClientId,
-        Username: userName
-    });
+  return userPool.resendConfirmationCode({
+    ClientId: poolData.ClientId,
+    Username: userName
+  });
 }
 
 

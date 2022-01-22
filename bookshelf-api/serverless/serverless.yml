@@ -23,7 +23,16 @@ frameworkVersion: '2'
 provider:
   name: aws
   runtime: nodejs12.x
+  region: us-west-2
   lambdaHashingVersion: 20201221
+  iamRoleStatusments:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
 
 # you can overwrite defaults here
 #  stage: dev
@@ -62,27 +71,36 @@ functions:
   getLibrary:
     handler: handler.getLibrary
     events:
-      - httpApi:
+      - http:
+          cors: true
           path: /users/{userId}/library
           method: get
-      - cognitoUserPool:
-          pool: bookshelfPool
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer      
   addUser:
     handler: handler.addUser
     events:
-      - httpApi:
+      - http:
+          cors: true
           path: /users/{userId}
           method: post
-      - cognitoUserPool:
-          pool: bookshelfPool
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer      
   addBook:
     handler: handle.addBook
     events:
-      - httpApi:
+      - http:
+          cors: true
           path: /users/{userId}/library/
           method: post
-      - cognitoUserPool:
-          pool: bookshelfPool
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -134,10 +152,23 @@ resources:
             IdentitySource: method.request.header.Authorization
             RestApiId:
                 Ref: ApiGatewayRestApi
-            ProviderARNS:
+            ProviderARNs:
                 - Fn::GetAtt:
-                    - UserPool
+                    - BookshelfPool
                     - Arn
+    BookshelfPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: bookshelf-pool
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 8
+        UsernameAttributes:
+          - email
+        Schema:
+          - AttributeDataType: String
+            Name: email
+            Required: false
 #    NewResource:
 #      Type: AWS::S3::Bucket
 #      Properties:

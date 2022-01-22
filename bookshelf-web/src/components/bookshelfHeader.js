@@ -2,13 +2,14 @@ import { Navbar, Nav, NavDropdown, Button, OverlayTrigger, Popover, Container, R
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserAlt } from '@fortawesome/free-solid-svg-icons'
 import BookshelfLogin from "./bookshelfLogin";
+import UserMenu from '../userMenu';
 
 function BookshelfHeader(props) {
     const {user} = props;
     const loginPopover = (
       <Popover id="popover-basic">        
         <Popover.Content>
-            <BookshelfLogin />      
+            <BookshelfLogin loginCallback={props.loginCallback} />      
         </Popover.Content>
       </Popover>
     );
@@ -16,12 +17,7 @@ function BookshelfHeader(props) {
     const userPopover = (
       <Popover id="popover-basic">        
         <Popover.Content>
-            <Container>
-              <Row>
-                <Col>
-                </Col>
-              </Row>
-            </Container>
+            <UserMenu />
         </Popover.Content>
       </Popover>
     );

@@ -1,6 +1,7 @@
-import {Container, Row, Col, Button, Form, Spinner, Alert} from 'react-bootstrap';
+import { Container, Row, Col, Button, Form, Spinner, Alert } from 'react-bootstrap';
 import userManager from '../util/userManager';
-import {useState} from 'react';
+import { useState } from 'react';
+import ErrorView from './errorView';
 
 function BookshelfLogin(props) {
 
@@ -15,49 +16,44 @@ function BookshelfLogin(props) {
         setBusy(true);
         try {
             const loginResponse = await userManager.login(username, password);
-            props.loginCallback(loginResponse);
             console.log(loginResponse);
-        } catch(error) {
-            if(error.message) {
-                setError(error.message);
-            } else {
-                setError(JSON.stringify(error));
-            }
-        }        
+            props.loginCallback(loginResponse);
+            setError(null);
+        } catch (error) {
+            setError(error);
+        }
         setBusy(false);
     }
 
-    return (        
+    return (
         <Container>
-            {error && 
-            <Row>
-                <Col><Alert variant='danger'>{error}</Alert></Col>
-            </Row>
-}
+            {error &&
+                <ErrorView error={error} />
+            }
             <Form onSubmit={signIn}>
                 <Row>
                     <Col>
-                        <Form.Group controlId="formUsername">
-                            <Form.Control type="text" placeholder="Username" id='username' />
+                        <Form.Group controlId="username">
+                            <Form.Control type="text" placeholder="Username" />
                         </Form.Group>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <Form.Group controlId="formPassword">
-                            <Form.Control type="password" placeholder="Password" id='password' />
+                        <Form.Group controlId="password">
+                            <Form.Control type="password" placeholder="Password" />
                         </Form.Group>
-                    
+
                     </Col>
                 </Row>
-                <Row>           
+                <Row>
                     <Col className='md-auto'>
                         <Button variant="primary" type="submit" className='mb-4' disabled={busy}>
                             Sign In
-                            {busy && <Spinner animation='border' variant='primary' />}
+                            {busy && <Spinner animation='border' variant='light' size='sm' />}
                         </Button>
                     </Col>
-                </Row>    
+                </Row>
             </Form>
         </Container>
 

@@ -1,35 +1,51 @@
-const fetch = require('fetch');
-class ApiManager {
+//const fetch = require('fetch');
 
-    var user;
-    var endpoint;
+const handleResponse = response => {
+    console.log(response);
+}
 
-    const get = async (path, apiContext) => {
-        await fetch(context.baseUrl, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization: `bearer ${apiContext.user.AuthenticationResult.AccessToken}`
-            }
-        });
-    }
+const get = async (path, apiContext) => {
 
-    const post = async (path, data, apiContext) => {
-        await fetch(context.baseUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization: `bearer ${apiContext.user.AuthenticationResult.AccessToken}`
-            },
-            body: request.stringify(data)
-        });
-    }
+    const response = await fetch(apiContext.baseUrl + path, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `bearer ${apiContext.user.AuthenticationResult.AccessToken}`
+        }
+    });
+    return response;
+}
 
-    const getLibrary = async apiContext => {
-        return get('/library', apiContext);
-    }
+const post = async (path, data, apiContext) => {
+    const response = await fetch(apiContext.baseUrl + path, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `bearer ${apiContext.user.AuthenticationResult.AccessToken}`
+        },
+        body: JSON.stringify(data)
+    });
+    return response;
+}
 
-    const addBook = async (book, apiContext) => {
-        return post('/book', book, apiContext); 
-    }
+const getLibrary = async apiContext => {
+    console.log('getLibrary()');
+    const response = get(`/users/${apiContext.user.AuthenticationResult.userId}/library`, apiContext);
+    return handleResponse(response);
+}
+
+const addBook = async (book, apiContext) => {
+    const response = post('/book', book, apiContext);
+    return handleResponse(response);
+}
+
+const addBookToLibrary = async (book, apiContext) => {
+    const response = post('/library/book', book, apiContext);
+    return handleResponse(response);
+}
+
+module.exports = {
+    getLibrary,
+    addBookToLibrary,
+    addBook
 }
