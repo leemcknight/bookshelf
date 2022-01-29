@@ -1,14 +1,15 @@
-import { Navbar, Nav, NavDropdown, Button, OverlayTrigger, Popover, Container, Row,  Col } from "react-bootstrap";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserAlt } from '@fortawesome/free-solid-svg-icons'
+import { ButtonGroup, Button } from "react-bootstrap";
 
-function UserMenu(props) {
+
+function UserMenu() {
     return (
-        <Container>
-            
-        </Container>
+        <ButtonGroup vertical>
+            <Button variant='light'>Profile</Button>
+            <Button variant='light'>Account Settings</Button>
+            <Button variant='light'>Logout</Button>
+        </ButtonGroup>
     );
-    
+
 }
 
 export default UserMenu;

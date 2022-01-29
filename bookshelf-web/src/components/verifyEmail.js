@@ -1,7 +1,7 @@
 import { Form, Container, Row, Col, Button, Modal, Spinner, Alert } from "react-bootstrap";
-import UserManager from '../util/userManager';
-import {withRouter} from 'react-router-dom';
-import {useState} from 'react';
+import { withRouter } from 'react-router-dom';
+import { useState } from 'react';
+const { signIn, confirmAccount } = require('../util/userManager');
 
 function VerifyEmail(props) {
     const [busy, setBusy] = useState();
@@ -9,20 +9,22 @@ function VerifyEmail(props) {
     const [email, setEmail] = useState();
     const [confirmed, setConfirmed] = useState(false);
 
+    /*
     async function resendCode(event) {
         event.stopPropagation();
         event.preventDefault();
 
         const email = event.target.email.value;
         setEmail(email);
-        await UserManager.resendConfirmationCode(email);
+        await resendConfirmationCode(email);
     }
+    */
 
     async function login(event) {
         event.stopPropagation();
         event.preventDefault();
         const password = event.target.password.value;
-        const response = await UserManager.login(email, password);
+        const response = await signIn(email, password);
         await props.loginCallback(response)
         props.history.push('/home');
     }
@@ -36,11 +38,11 @@ function VerifyEmail(props) {
         const code = event.target.code.value;
         setBusy(true);
         try {
-            const response = await UserManager.confirmAccount(email, code);
+            const response = await confirmAccount(email, code);
             setConfirmed(true);
             console.log(response);
-        } catch(error) {
-            if(error.message) {
+        } catch (error) {
+            if (error.message) {
                 setError(error.message);
             } else {
                 setError(JSON.stringify(error));
@@ -48,26 +50,26 @@ function VerifyEmail(props) {
         }
         setBusy(false);
     }
-    
-    return(
+
+    return (
         <Container>
-            {props.account && 
-            <Row>
-                <Col>We have sent a confirmation email to {props.account.userName}.  Please enter the confirmation code attached.
-                </Col>
-            </Row>
-            
+            {props.account &&
+                <Row>
+                    <Col>We have sent a confirmation email to {props.account.userName}.  Please enter the confirmation code attached.
+                    </Col>
+                </Row>
+
             }
             {confirmed &&
-            <Row>
-                <Col><Alert variant='success'></Alert>
-                </Col>
-            </Row>
+                <Row>
+                    <Col><Alert variant='success'></Alert>
+                    </Col>
+                </Row>
             }
-            {error && 
-            <Row>
-                <Col><Alert variant='warning'>{error}</Alert></Col>
-            </Row>
+            {error &&
+                <Row>
+                    <Col><Alert variant='warning'>{error}</Alert></Col>
+                </Row>
             }
             <Row className='m-5'>
                 <Col>

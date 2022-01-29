@@ -1,28 +1,28 @@
-import { Container, Row, Col, Button, Form, Spinner, Alert } from 'react-bootstrap';
-import userManager from '../util/userManager';
+import { Container, Row, Col, Button, Form, Spinner } from 'react-bootstrap';
 import { useState } from 'react';
 import ErrorView from './errorView';
+const { signIn } = require('../util/userManager');
+
 
 function BookshelfLogin(props) {
 
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState();
 
-    async function signIn(event) {
+    async function handleSignIn(event) {
         event.preventDefault();
         event.stopPropagation();
         const username = event.target.username.value;
         const password = event.target.password.value;
         setBusy(true);
         try {
-            const loginResponse = await userManager.login(username, password);
-            console.log(loginResponse);
-            props.loginCallback(loginResponse);
-            setError(null);
+            const loginResponse = await signIn(username, password);
+            await props.loginCallback(loginResponse);
+            props.history.push("/home");
         } catch (error) {
             setError(error);
         }
-        setBusy(false);
+        //setBusy(false);
     }
 
     return (
@@ -30,7 +30,7 @@ function BookshelfLogin(props) {
             {error &&
                 <ErrorView error={error} />
             }
-            <Form onSubmit={signIn}>
+            <Form onSubmit={handleSignIn}>
                 <Row>
                     <Col>
                         <Form.Group controlId="username">

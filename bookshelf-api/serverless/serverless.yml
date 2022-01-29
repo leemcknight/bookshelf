@@ -39,20 +39,11 @@ provider:
 #  region: us-east-1
 
 # you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:*"
+      Resource: "*"    
 
 # you can define service wide environment variables here
 #  environment:
@@ -75,6 +66,10 @@ functions:
           cors: true
           path: /users/{userId}/library
           method: get
+          request: 
+            parameters: 
+              paths: 
+                userId: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -86,17 +81,41 @@ functions:
           cors: true
           path: /users/{userId}
           method: post
+          request: 
+            parameters: 
+              paths: 
+                userId: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer      
-  addBook:
-    handler: handle.addBook
+  addBookshelf:
+    handler: handler.addBookshelf
     events:
       - http:
           cors: true
-          path: /users/{userId}/library/
+          path: /users/{userId}/library
           method: post
+          request: 
+            parameters: 
+              paths: 
+                userId: true                
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  addBook:
+    handler: handler.addBookToBookshelf
+    events:
+      - http:
+          cors: true
+          path: /users/{userId}/library/bookshelf/{bookshelfId}
+          method: post
+          request: 
+            parameters: 
+              paths: 
+                userId: true
+                bookshelfId: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
