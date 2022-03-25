@@ -1,14 +1,18 @@
 import { Container, Row, Col, Button, Form, Spinner } from 'react-bootstrap';
 import { useState } from 'react';
 import ErrorView from './errorView';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Auth } from 'aws-amplify';
 const { signIn } = require('../util/userManager');
-
+const { login } = require('../features/userSession');
 
 function BookshelfLogin(props) {
 
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState();
-
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     async function handleSignIn(event) {
         event.preventDefault();
         event.stopPropagation();
@@ -16,13 +20,13 @@ function BookshelfLogin(props) {
         const password = event.target.password.value;
         setBusy(true);
         try {
-            const loginResponse = await signIn(username, password);
-            await props.loginCallback(loginResponse);
-            props.history.push("/home");
+            const loginResponse = await Auth.signIn(username, password);
+            console.log(loginResponse);
+            navigate('/home');
         } catch (error) {
             setError(error);
+            setBusy(false);
         }
-        //setBusy(false);
     }
 
     return (

@@ -1,21 +1,18 @@
 import { Button, Form, Modal } from "react-bootstrap";
-const api = require('../util/apiManager');
 
 function AddBookModal(props) {
-    const [busy, setBusy] = useState(false);
 
-    const handleAddBook = (event) => {
-        event.stopPropagation();
+    const handleAddBook = async e => {
+        e.preventDefault();
+        e.stopPropagation();
 
         const book = {
-            title: '',
-            author: '',
-            isbn: ''
+            title: e.target.title.value,
+            author: e.target.author.value,
+            isbn: e.target.isbn.value
         }
-        setBusy(true);
-        props.addBookCallbakc(book);
 
-        setBusy(false)
+        await props.bookAddedCallback(book);
     }
 
     return (
@@ -27,22 +24,24 @@ function AddBookModal(props) {
                 <Form>
                     <Form.Group className="mb-3" controlId="title">
                         <Form.Label>Title</Form.Label>
-                        <Form.Control type="email" placeholder="Book Title" />
+                        <Form.Control type="text" placeholder="Book Title" />
                     </Form.Group>
-
                     <Form.Group className="mb-3" controlId="author">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" />
+                        <Form.Label>Author</Form.Label>
+                        <Form.Control type="text" placeholder="Author Name" />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="isbn">
-                        <Form.Check type="checkbox" label="Check me out" />
+                        <Form.Label>ISBN</Form.Label>
+                        <Form.Control type="text" />
                     </Form.Group>
-                    <Button variant="primary" type="submit">
-                        Submit
+
+                    <Button variant="primary" type="submit" onSubmit={handleAddBook}>
+                        Add Book
                     </Button>
-                    <Button variant="primary" type="cancel">
-                        Submit
+                    <Button variant="primary" type="cancel" >
+                        Cancel
                     </Button>
+
                 </Form>
             </Modal.Body>
         </Modal>

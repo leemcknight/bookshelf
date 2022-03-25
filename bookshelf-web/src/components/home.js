@@ -1,43 +1,62 @@
-import { withRouter } from "react-router-dom";
-import { Container, Row, Col, Button } from 'react-bootstrap';
-import AddBookModal from "./addBookModal";
+import { Link } from "react-router-dom";
+import { Container, Row, Col, Button, Spinner } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import AddBookshelfModal from "./addBookshelfModal";
+import { useGetLibraryQuery } from "../services/BookshelfApi";
+import ErrorView from "./errorView";
+import { Auth } from "aws-amplify";
 
 function Home(props) {
 
-    const [showAddBookModal, setShowsAddBookModal] = useState(false);
-
-
-    const bookAddedCallback = async (bookshelf, book) => {
-
-    }
-
-    function handleAddBook(bookshelf) {
-        setShowsAddBookModal(true);
-    }
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [cognitoId, setCognitoId] = useState();
+    const [showAddBookshelfModal, setShowsAddBookshelfModal] = useState(false);
+    const {
+        data: library,
+        isFetching,
+        isError,
+        error,
+        isSuccess
+    } = useGetLibraryQuery(cognitoId, { skip: !isLoggedIn });
 
     function handleAddBookshelf() {
-
+        setShowsAddBookshelfModal(true);
     }
+
+    const bookshelfAddedCallback = async bookshelf => {
+        setShowsAddBookshelfModal(false);
+    }
+
+    useEffect(() => {
+        async function checkLogin() {
+            const session = await (await Auth.currentSession()).getAccessToken();
+            setIsLoggedIn(session);
+            setCognitoId(session.payload.sub);
+        }
+        checkLogin();
+    }, [])
 
     return (
         <Container>
+            {isFetching && <Spinner animation="border" variant="success" size="lg" />}
+            {isError && <ErrorView error={error} />}
             <Row>
                 <Col>My Bookshelves</Col>
                 <Col>
-                    <Button onClick={handleAddBook}>Add Book</Button>
+                    <Button onClick={handleAddBookshelf}>Add Bookshelf</Button>
                 </Col>
             </Row>
-            {props.library && props.library.bookshelves &&
-                props.library.bookshelves.map(b => {
+            {isSuccess &&
+                library.results.Items.map(b => (
                     <Row>
-                        <Col>{b.name}</Col>
+                        <Col><Link to="/">{b.name}</Link></Col>
                         <Col>{b.bookCount}</Col>
                     </Row>
-                })
+                ))
             }
-            <AddBookModal show={showAddBookModal} bookAddedCallback={bookAddedCallback} />
+            <AddBookshelfModal show={showAddBookshelfModal} bookshelfAddedCallback={bookshelfAddedCallback} />
         </Container>
     );
 }
 
-export default withRouter(Home);
+export default Home;

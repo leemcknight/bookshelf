@@ -1,5 +1,5 @@
 import { Form, Container, Row, Col, Button, Modal, Spinner, Alert } from "react-bootstrap";
-import { withRouter } from 'react-router-dom';
+import { useNavigate, withRouter } from 'react-router-dom';
 import { useState } from 'react';
 const { signIn, confirmAccount } = require('../util/userManager');
 
@@ -8,6 +8,7 @@ function VerifyEmail(props) {
     const [error, setError] = useState();
     const [email, setEmail] = useState();
     const [confirmed, setConfirmed] = useState(false);
+    const navigate = useNavigate();
 
     /*
     async function resendCode(event) {
@@ -26,7 +27,7 @@ function VerifyEmail(props) {
         const password = event.target.password.value;
         const response = await signIn(email, password);
         await props.loginCallback(response)
-        props.history.push('/home');
+        navigate('/home');
     }
 
     async function verify(event) {
@@ -103,4 +104,4 @@ function VerifyEmail(props) {
     );
 }
 
-export default withRouter(VerifyEmail);
+export default VerifyEmail;

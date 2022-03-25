@@ -1,10 +1,11 @@
-import {Form, Container, Row, Col, Button, Jumbotron, Alert} from 'react-bootstrap';
-import {withRouter} from 'react-router-dom';
+import { Form, Container, Row, Col, Button, Jumbotron, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 const userManager = require('../util/userManager');
-const {useState} = require('react');
+const { useState } = require('react');
 
 function Welcome(props) {
     const [error, setError] = useState();
+    const navigate = useNavigate();
 
     async function createAccount(event) {
         event.stopPropagation();
@@ -18,15 +19,15 @@ function Welcome(props) {
         try {
             await userManager.createAccount(account);
             props.createAccountCallback(account);
-            props.history.push('/confirm');
-        } catch(error) {
-            if(error.message) {
+            navigate('/confirm');
+        } catch (error) {
+            if (error.message) {
                 setError(error.message);
             } else {
                 setError(JSON.stringify(error));
             }
         }
-        
+
     }
 
     return (
@@ -36,11 +37,11 @@ function Welcome(props) {
                     <Col><Alert variant='danger'>{error}</Alert></Col>
                 </Row>
                 <Row className='align-center'>
-                    <Col><h3>Create an account to build your bookshelf</h3></Col>                
+                    <Col><h3>Create an account to build your bookshelf</h3></Col>
                 </Row>
                 <Form onSubmit={createAccount}>
-                    <Row>                
-                        <Col>                        
+                    <Row>
+                        <Col>
                             <Form.Group controlId="formFirstName">
                                 <Form.Control type="text" placeholder="First Name" />
                             </Form.Group>
@@ -58,9 +59,9 @@ function Welcome(props) {
                             </Form.Group>
                         </Col>
                         <Col>
-                            <Form.Group controlId="formBasicPassword">                        
+                            <Form.Group controlId="formBasicPassword">
                                 <Form.Control type="password" placeholder="Password" />
-                            </Form.Group>                    
+                            </Form.Group>
                         </Col>
                     </Row>
                     <Row>
@@ -69,11 +70,11 @@ function Welcome(props) {
                                 Create Account
                             </Button>
                         </Col>
-                    </Row>                                            
+                    </Row>
                 </Form>
             </Container>
         </Jumbotron>
     )
 }
 
-export default withRouter(Welcome);
+export default Welcome;

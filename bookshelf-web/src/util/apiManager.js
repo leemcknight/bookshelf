@@ -36,7 +36,11 @@ const getLibrary = async apiContext => {
     } catch (error) {
 
     }
+}
 
+const getBooks = async (bookshelfId, apiContext) => {
+    const response = await get(`/users/${apiContext.user.sub}/library/${bookshelfId}`, apiContext);
+    return handleResponse(response);
 }
 
 const addBook = async (book, apiContext) => {
@@ -44,19 +48,20 @@ const addBook = async (book, apiContext) => {
     return handleResponse(response);
 }
 
-const addBookshelf = async (bookshelf) => {
+const addBookshelf = async (bookshelf, apiContext) => {
     const response = await post(`/users/${apiContext.user.sub}/library`, bookshelf, apiContext);
     return handleResponse(response);
 }
 
-const addBookToLibrary = async (bookshelfId, book, apiContext) => {
+const addBookToBookshelf = async (bookshelfId, book, apiContext) => {
     const response = await post(`/users/${apiContext.user.sub}/library/bookshelf/${bookshelfId}`, book, apiContext);
     return handleResponse(response);
 }
 
 module.exports = {
     getLibrary,
-    addBookToLibrary,
+    getBooks,
+    addBookToBookshelf,
     addBookshelf,
     addBook
 }
