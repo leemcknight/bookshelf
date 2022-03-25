@@ -11,7 +11,7 @@ const TABLE_NAME = 'bookshelf';
 
     dynamo keys:
 
-    1.  Library
+    1.  Library (bookshelves)
         user-{userId}-library
     2.  Bookshelf (books)
         Partition Key: user-{userId}-bookshelf-{bookshelfId} 
@@ -22,11 +22,28 @@ const TABLE_NAME = 'bookshelf';
 
 const getLibrary = async userId => {
     const key = `user-${userId}-library`;
-    const params = {
+
+    var params = {
         TableName: TABLE_NAME,
-        Key: key
+        KeyConditionExpression: 'item_key = :item_key',
+        ExpressionAttributeValues: {
+            ':item_key': key
+        }
     };
-    return dynamo.get(params).promise();
+    return dynamo.query(params).promise();
+}
+
+const getBooks = async (userId, bookshelfId) => {
+    const partitionKey = `user-${userId}-bookshelf-${bookshelfId}`;
+
+    var params = {
+        TableName: TABLE_NAME,
+        KeyConditionExpression: 'item_key = :item_key',
+        ExpressionAttributeValues: {
+            ':item_key': partitionKey
+        }
+    };
+    return dynamo.query(params).promise();
 }
 
 const addBookshelf = async (userId, bookshelf) => {
@@ -102,6 +119,7 @@ const addUser = async (user) => {
 
 module.exports = {
     getLibrary,
+    getBooks,
     addUser,
     addBook,
     addBookshelf,

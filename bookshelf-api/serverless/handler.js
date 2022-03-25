@@ -4,29 +4,42 @@ const api = require('./bookshelf.js');
 function buildResponse(response) {
     return {
         statusCode: 200,
-        body: {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true,
+        },
+        body: JSON.stringify({
             success: true,
-            results: JSON.stringify(response)
-        }
-
+            results: response
+        })
     }
 }
 
 function buildErrorResponse(error) {
     return {
         statusCode: 500,
-        body: {
+        body: JSON.stringify({
             success: false,
-            results: JSON.stringify(error)
-        }
+            errror: error
+        })
     }
 }
 
 module.exports.getLibrary = async event => {
-    console.log('getLibrary');
-    console.log(event);
     const userId = event.pathParameters.userId;
     const response = await api.getLibrary(userId);
+    try {
+        return buildResponse(response);
+    } catch (error) {
+        return buildErrorResponse(error);
+    }
+}
+
+module.exports.getBooks = async event => {
+    console.log('getBooks');
+    const userId = event.pathParameters.userId;
+    const bookshelfId = event.pathParameters.bookshelfId;
+    const response = await api.getBooks(userId, bookshelfId);
     try {
         return buildResponse(response);
     } catch (error) {
