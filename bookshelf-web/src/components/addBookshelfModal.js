@@ -1,29 +1,23 @@
 import { Button, Form, Modal, Spinner } from "react-bootstrap";
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAddBookshelfMutation } from "../services/BookshelfApi";
 import ErrorView from './errorView';
 import { Auth } from "aws-amplify";
 const { v4 } = require('uuid');
 
 function AddBookshelfModal(props) {
-    const [addBookshelf, { isLoading, error, data, isSuccess, isError }] = useAddBookshelfMutation();
+    const [addBookshelf, { isLoading, error, isSuccess, isError }] = useAddBookshelfMutation();
 
-    console.log('isLoading:');
-    console.log(isLoading);
     const handleAddBookshelf = async e => {
         e.stopPropagation();
         e.preventDefault();
-
-        console.log(e.target);
         const bookshelf = {
             id: v4(),
             name: e.target.name.value,
             notes: e.target.notes.value
         }
 
-        const session = await (await Auth.currentSession()).getAccessToken();
-        const cognitoId = session.payload.sub;
-        addBookshelf({ cognitoId, bookshelf });
+        addBookshelf(bookshelf);
     }
 
     useEffect(() => {

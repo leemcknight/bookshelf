@@ -63,8 +63,9 @@ const addBookshelf = async (userId, bookshelf) => {
 /*
 
 */
-const addBookToBookshelf = async (user, bookshelfId, book) => {
-    const partitionKey = `user-${user.id}-bookshelf-${bookshelfId}`;
+const addBookToBookshelf = async (userId, bookshelfId, book) => {
+    console.log('bookshelf.addBookToBookshelf()');
+    const partitionKey = `user-${userId}-bookshelf-${bookshelfId}`;
 
     var params = {
         TableName: TABLE_NAME,
@@ -75,6 +76,7 @@ const addBookToBookshelf = async (user, bookshelfId, book) => {
         }
     };
 
+    console.log(params);
     return dynamo.put(params).promise();
 }
 

@@ -64,27 +64,22 @@ functions:
     events:
       - http:
           cors: true
-          path: /users/{userId}/library
-          method: get
-          request: 
-            parameters: 
-              paths: 
-                userId: true
+          path: /users/library
+          method: get          
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer     
-  getBooks:
+  getBooksInBookshelf:
     handler: handler.getBooks
     events:
       - http:
           cors: true
-          path: /users/{userId}/library/bookshelf/{bookshelfId}
+          path: /users/library/bookshelf/{bookshelfId}
           method: get
           request: 
             parameters: 
-              paths: 
-                userId: true
+              paths:                 
                 bookshelfId: true
           authorizer:
             type: COGNITO_USER_POOLS
@@ -95,12 +90,8 @@ functions:
     events:
       - http:
           cors: true
-          path: /users/{userId}
-          method: post
-          request: 
-            parameters: 
-              paths: 
-                userId: true
+          path: /users/
+          method: post          
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -110,27 +101,22 @@ functions:
     events:
       - http:
           cors: true
-          path: /users/{userId}/library
-          method: post
-          request: 
-            parameters: 
-              paths: 
-                userId: true                
+          path: /users/library
+          method: post          
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-  addBook:
+  addBookToBookshelf:
     handler: handler.addBookToBookshelf
     events:
       - http:
           cors: true
-          path: /users/{userId}/library/bookshelf/{bookshelfId}
+          path: /users/library/bookshelf/{bookshelfId}
           method: post
           request: 
             parameters: 
-              paths: 
-                userId: true
+              paths:                 
                 bookshelfId: true
           authorizer:
             type: COGNITO_USER_POOLS

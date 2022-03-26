@@ -18,10 +18,10 @@ export const BookshelfApi = createApi({
     tagTypes: ['profile', 'library', 'bookshelf'],
     endpoints: (builder) => ({
         getLibrary: builder.query({
-            query: cognitoId => `users/${cognitoId}/library`
+            query: () => `users/library`
         }),
         getBooks: builder.query({
-            query: (cognitoId, bookshelfId) => `/users/${cognitoId}/library/${bookshelfId}`
+            query: (bookshelfId) => `/users/library/bookshelf/${bookshelfId}`
         }),
         addBook: builder.mutation({
             query: ({ id, ...patch }) => ({
@@ -31,13 +31,19 @@ export const BookshelfApi = createApi({
             }),
         }),
         addBookshelf: builder.mutation({
-            query: ({ cognitoId, bookshelf }) => ({
-                url: `users/${cognitoId}/library`,
+            query: bookshelf => ({
+                url: `users/library`,
                 method: 'POST',
                 body: bookshelf
             })
         }),
-        addBookToBookshelf: builder.mutation({}),
+        addBookToBookshelf: builder.mutation({
+            query: ({ bookshelfId, ...book }) => ({
+                url: `/users/library/bookshelf/${bookshelfId}`,
+                method: 'POST',
+                body: book
+            })
+        }),
     }),
 })
 

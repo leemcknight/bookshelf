@@ -9,7 +9,6 @@ import { Auth } from "aws-amplify";
 function Home(props) {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [cognitoId, setCognitoId] = useState();
     const [showAddBookshelfModal, setShowsAddBookshelfModal] = useState(false);
     const {
         data: library,
@@ -17,7 +16,7 @@ function Home(props) {
         isError,
         error,
         isSuccess
-    } = useGetLibraryQuery(cognitoId, { skip: !isLoggedIn });
+    } = useGetLibraryQuery({ skip: !isLoggedIn });
 
     function handleAddBookshelf() {
         setShowsAddBookshelfModal(true);
@@ -31,7 +30,6 @@ function Home(props) {
         async function checkLogin() {
             const session = await (await Auth.currentSession()).getAccessToken();
             setIsLoggedIn(session);
-            setCognitoId(session.payload.sub);
         }
         checkLogin();
     }, [])
@@ -48,8 +46,8 @@ function Home(props) {
             </Row>
             {isSuccess &&
                 library.results.Items.map(b => (
-                    <Row>
-                        <Col><Link to="/">{b.name}</Link></Col>
+                    <Row key={b.item_key}>
+                        <Col><Link to={`/library/bookshelf/${b.id}`}>{b.name}</Link></Col>
                         <Col>{b.bookCount}</Col>
                     </Row>
                 ))

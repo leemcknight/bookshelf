@@ -16,6 +16,7 @@ function buildResponse(response) {
 }
 
 function buildErrorResponse(error) {
+    console.error(error);
     return {
         statusCode: 500,
         body: JSON.stringify({
@@ -25,8 +26,12 @@ function buildErrorResponse(error) {
     }
 }
 
+function getCognitoId(event) {
+    return event.requestContext.authorizer.claims.sub;
+}
+
 module.exports.getLibrary = async event => {
-    const userId = event.pathParameters.userId;
+    const userId = getCognitoId(event);
     const response = await api.getLibrary(userId);
     try {
         return buildResponse(response);
@@ -37,7 +42,7 @@ module.exports.getLibrary = async event => {
 
 module.exports.getBooks = async event => {
     console.log('getBooks');
-    const userId = event.pathParameters.userId;
+    const userId = getCognitoId(event);
     const bookshelfId = event.pathParameters.bookshelfId;
     const response = await api.getBooks(userId, bookshelfId);
     try {
@@ -49,7 +54,7 @@ module.exports.getBooks = async event => {
 
 module.exports.addBookshelf = async event => {
     const bookshelf = JSON.parse(event.body);
-    const userId = event.pathParameters.userId;
+    const userId = getCognitoId(event);
     try {
         const response = await api.addBookshelf(userId, bookshelf)
         return buildResponse(response);
@@ -60,10 +65,10 @@ module.exports.addBookshelf = async event => {
 
 module.exports.addBookToBookshelf = async event => {
     const book = JSON.parse(event.body);
-    const userId = event.pathParameters.userId;
-    const bookshelfId = event.parameters.bookshelfId;
+    const userId = getCognitoId(event);
+    const bookshelfId = event.pathParameters.bookshelfId;
     try {
-        const response = await api.addBook(userId, bookshelfId, book)
+        const response = await api.addBookToBookshelf(userId, bookshelfId, book)
         return buildResponse(response);
     } catch (e) {
         return buildErrorResponse(e);

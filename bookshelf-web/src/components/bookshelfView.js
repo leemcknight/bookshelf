@@ -2,30 +2,30 @@ import { Container, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { useState } from 'react';
 import ErrorView from './errorView';
 import AddBookModal from './addBookModal';
-import { useSelector } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useGetBooksQuery } from '../services/BookshelfApi';
 
-const { api, useGetBooksQuery } = require('../util/apiManager');
-
-function BookshelfView(props) {
+function BookshelfView() {
     const [showAddBookModal, setShowAddBookModal] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const { data: bookshelf, isFetching, isSuccess, isError, error } = useGetBooksQuery(props.bookshelfId, { skip: !isLoggedIn });
+    const { bookshelfId } = useParams();
+    const { data: bookshelf, isFetching, isSuccess, isError, error } = useGetBooksQuery(bookshelfId, { skip: !isLoggedIn });
+
 
     const handleAddBook = async () => {
         setShowAddBookModal(true);
     }
 
     const bookAddedCallback = async book => {
-        const response = await api.addBookToBookshelf(bookshelf.id, book);
-        return response;
+        showAddBookModal(false);
     }
 
     useEffect(() => {
         async function checkLogin() {
-            const user = await Auth.currentAuthenticatedUser();
-            setIsLoggedIn(user);
+            const token = await (await Auth.currentSession()).getAccessToken();
+            setIsLoggedIn(token);
         }
         checkLogin();
     }, [])
@@ -38,7 +38,7 @@ function BookshelfView(props) {
 
             <Row><Col><Button onClick={handleAddBook}>Add Book</Button></Col></Row>
             {isSuccess &&
-                bookshelf.books.map(book => (
+                bookshelf.results.Items.map(book => (
                     <Row>
                         <Col>{book.author}</Col>
                         <Col>{book.title}</Col>
@@ -46,7 +46,7 @@ function BookshelfView(props) {
                     </Row>
                 ))
             }
-            <AddBookModal show={showAddBookModal} bookAddedCallback={bookAddedCallback} />
+            <AddBookModal show={showAddBookModal} bookAddedCallback={bookAddedCallback} bookshelfId={bookshelfId} />
         </Container >
     )
 }

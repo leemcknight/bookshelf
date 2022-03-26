@@ -14,7 +14,7 @@ function App() {
         <Route exact path='/' element={<Welcome />} />
         <Route exact path='/home' element={<Home />} />
         <Route exact path='/confirm' element={<VerifyEmail />} />
-        <Route exact path='/library/bookshelf' element={<BookshelfView />} />
+        <Route exact path='/library/bookshelf/:bookshelfId' element={<BookshelfView />} />
       </Routes>
     </div>
   );
