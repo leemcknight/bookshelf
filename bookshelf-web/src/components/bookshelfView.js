@@ -18,8 +18,8 @@ function BookshelfView() {
         setShowAddBookModal(true);
     }
 
-    const bookAddedCallback = async book => {
-        showAddBookModal(false);
+    const bookAddedCallback = () => {
+        setShowAddBookModal(false);
     }
 
     useEffect(() => {
@@ -39,7 +39,7 @@ function BookshelfView() {
             <Row><Col><Button onClick={handleAddBook}>Add Book</Button></Col></Row>
             {isSuccess &&
                 bookshelf.results.Items.map(book => (
-                    <Row>
+                    <Row key={book.isbn}>
                         <Col>{book.author}</Col>
                         <Col>{book.title}</Col>
                         <Col>{book.rating}</Col>

@@ -18,10 +18,12 @@ export const BookshelfApi = createApi({
     tagTypes: ['profile', 'library', 'bookshelf'],
     endpoints: (builder) => ({
         getLibrary: builder.query({
-            query: () => `users/library`
+            query: () => `users/library`,
+            providesTags: ['library']
         }),
         getBooks: builder.query({
-            query: (bookshelfId) => `/users/library/bookshelf/${bookshelfId}`
+            query: (bookshelfId) => `/users/library/bookshelf/${bookshelfId}`,
+            providesTags: ["bookshelf"]
         }),
         addBook: builder.mutation({
             query: ({ id, ...patch }) => ({
@@ -35,14 +37,16 @@ export const BookshelfApi = createApi({
                 url: `users/library`,
                 method: 'POST',
                 body: bookshelf
-            })
+            }),
+            invalidatesTags: ['library']
         }),
         addBookToBookshelf: builder.mutation({
             query: ({ bookshelfId, ...book }) => ({
                 url: `/users/library/bookshelf/${bookshelfId}`,
                 method: 'POST',
                 body: book
-            })
+            }),
+            invalidatesTags: ["bookshelf"]
         }),
     }),
 })
