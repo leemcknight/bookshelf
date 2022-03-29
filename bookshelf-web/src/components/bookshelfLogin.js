@@ -4,10 +4,9 @@ import ErrorView from './errorView';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
-const { signIn } = require('../util/userManager');
-const { login } = require('../features/userSession');
+import { login } from '../features/userSession';
 
-function BookshelfLogin(props) {
+function BookshelfLogin() {
 
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState();
@@ -20,8 +19,9 @@ function BookshelfLogin(props) {
         const password = event.target.password.value;
         setBusy(true);
         try {
-            const loginResponse = await Auth.signIn(username, password);
-            console.log(loginResponse);
+            await Auth.signIn(username, password);
+            const user = await Auth.currentAuthenticatedUser();
+            dispatch(login(user.attributes));
             navigate('/home');
         } catch (error) {
             setError(error);

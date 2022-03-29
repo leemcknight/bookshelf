@@ -74,3 +74,11 @@ module.exports.addBookToBookshelf = async event => {
         return buildErrorResponse(e);
     }
 }
+
+
+module.exports.addUser = async (event, context, callback) => {
+    const user = event.request.userAttributes;
+    await api.addUser(user);
+    callback(null, event);
+
+}

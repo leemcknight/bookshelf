@@ -96,6 +96,17 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer      
+  getUser:
+    handler: handler.getUser
+    events:
+      - http:
+          cors: true
+          path: /users
+          method: post          
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer      
   addBookshelf:
     handler: handler.addBookshelf
     events:

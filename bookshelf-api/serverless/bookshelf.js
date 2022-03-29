@@ -16,7 +16,7 @@ const TABLE_NAME = 'bookshelf';
     2.  Bookshelf (books)
         Partition Key: user-{userId}-bookshelf-{bookshelfId} 
         Range Key: bookId    
-    3.  User
+    3.  User Profile
         user-{userId}-profile
 */
 
@@ -60,9 +60,6 @@ const addBookshelf = async (userId, bookshelf) => {
     return dynamo.put(params).promise();
 }
 
-/*
-
-*/
 const addBookToBookshelf = async (userId, bookshelfId, book) => {
     console.log('bookshelf.addBookToBookshelf()');
     const partitionKey = `user-${userId}-bookshelf-${bookshelfId}`;
@@ -76,7 +73,6 @@ const addBookToBookshelf = async (userId, bookshelfId, book) => {
         }
     };
 
-    console.log(params);
     return dynamo.put(params).promise();
 }
 
