@@ -114,6 +114,19 @@ const addUser = async (user) => {
     return dynamo.put(params).promise();
 }
 
+const updateUserProfile = async (user) => {
+    const partitionKey = `user-${user.userId}-profile`;
+    const params = {
+        TableName: TABLE_NAME,
+        Item: {
+            item_key: partitionKey,
+            ...user
+        }
+    }
+
+    return dynamo.update(params).promise();
+}
+
 
 module.exports = {
     getLibrary,
@@ -121,5 +134,6 @@ module.exports = {
     addUser,
     addBook,
     addBookshelf,
-    addBookToBookshelf
+    addBookToBookshelf,
+    updateUserProfile
 };

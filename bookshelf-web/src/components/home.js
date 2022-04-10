@@ -46,7 +46,7 @@ function Home(props) {
             </Row>
             {isSuccess &&
                 library.results.Items.map(b => (
-                    <Row key={b.item_key}>
+                    <Row key={b.item_name}>
                         <Col><Link to={`/library/bookshelf/${b.id}`}>{b.name}</Link></Col>
                         <Col>{b.bookCount}</Col>
                     </Row>

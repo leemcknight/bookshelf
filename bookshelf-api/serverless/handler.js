@@ -78,7 +78,13 @@ module.exports.addBookToBookshelf = async event => {
 
 module.exports.addUser = async (event, context, callback) => {
     const user = event.request.userAttributes;
+    console.log(user);
     await api.addUser(user);
     callback(null, event);
+}
 
+module.exports.updateUserProfile = async (event, context, callback) => {
+    const user = event.request.userAttributes;
+    await api.updateUserProfile(user);
+    callback(null, event);
 }

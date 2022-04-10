@@ -8,8 +8,6 @@ export const userSessionSlice = createSlice({
     reducers: {
         login(state, user) {
             state.currentUser = user;
-            console.log('new state:');
-            console.log(state);
         },
         logout(state) {
             state.currentUser = null;

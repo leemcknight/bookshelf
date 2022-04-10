@@ -30,6 +30,9 @@ function BookshelfView() {
         checkLogin();
     }, [])
 
+    if (isSuccess) {
+        console.log(bookshelf);
+    }
     return (
         <Container>
             {isFetching && <Spinner animation="border" variant="success" size="lg" />}

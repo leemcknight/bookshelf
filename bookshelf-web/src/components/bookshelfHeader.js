@@ -1,6 +1,6 @@
 import { Navbar, Nav, NavDropdown, Button, OverlayTrigger, Popover, Form, ButtonGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBook, faBriefcase, faSignInAlt, faUserAlt, faUserEdit } from '@fortawesome/free-solid-svg-icons'
+import { faBook, faBriefcase, faSignInAlt, faSlidersH, faUserAlt, faUserEdit, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -14,10 +14,10 @@ function BookshelfHeader() {
     <Popover id="popover-basic">
       <Popover.Content>
         <ButtonGroup vertical>
-          {!currentUser && <Button onClick={() => navigate('/login')} variant='light'><FontAwesomeIcon className='ml-3' color="green" icon={faSignInAlt} />Login</Button>}
-          {!currentUser && <Button onClick={() => navigate('/signup')} variant='light'><FontAwesomeIcon className='ml-3' color="grey" icon={faBriefcase} />Sign Up</Button>}
+          {!currentUser && <Button onClick={() => navigate('/login')} variant='light'><FontAwesomeIcon className='ml-3 justify-content-start' color="green" icon={faSignInAlt} />Login</Button>}
+          {!currentUser && <Button onClick={() => navigate('/signup')} variant='light'><FontAwesomeIcon className='ml-3' color="grey" icon={faUserPlus} />Sign Up</Button>}
           {currentUser && <Button onClick={() => navigate('/user/profile')} variant='light'><FontAwesomeIcon className='ml-3' icon={faUserEdit} />Profile</Button>}
-          {currentUser && <Button onClick={() => navigate('/user/settings')} variant='light'><FontAwesomeIcon className='ml-3' icon={faUserEdit} />Account Settings</Button>}
+          {currentUser && <Button onClick={() => navigate('/user/settings')} variant='light'><FontAwesomeIcon className='ml-3' icon={faSlidersH} />Account Settings</Button>}
           {currentUser && <Button variant='light'>Logout</Button>}
         </ButtonGroup>
       </Popover.Content>
@@ -57,11 +57,11 @@ function BookshelfHeader() {
         </Nav>
 
         {currentUser ?
-          <OverlayTrigger trigger="click" placement="bottom" overlay={userPopover}>
+          <OverlayTrigger trigger="focus" placement="bottom" overlay={userPopover}>
             <Button><FontAwesomeIcon className='mr-3' icon={faUserAlt} />{currentUser.payload.email}</Button>
           </OverlayTrigger>
           :
-          <OverlayTrigger trigger="click" placement="bottom" overlay={userPopover}>
+          <OverlayTrigger trigger="focus" placement="bottom" overlay={userPopover}>
             <Button>Login<FontAwesomeIcon className='ml-3' icon={faUserAlt} /></Button>
           </OverlayTrigger>
         }

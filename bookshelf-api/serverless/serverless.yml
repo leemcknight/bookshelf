@@ -86,16 +86,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer      
   addUser:
-    handler: handler.addUser
-    events:
-      - http:
-          cors: true
-          path: /users/
-          method: post          
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer      
+    handler: handler.addUser    
   getUser:
     handler: handler.getUser
     events:
@@ -103,6 +94,17 @@ functions:
           cors: true
           path: /users
           method: post          
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer      
+  updateUserProfile:
+    handler: handler.updateUserProfile
+    events:
+      - http:
+          cors: true
+          path: /users/profile
+          method: patch          
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:

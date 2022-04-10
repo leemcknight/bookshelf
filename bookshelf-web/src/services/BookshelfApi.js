@@ -48,6 +48,18 @@ export const BookshelfApi = createApi({
             }),
             invalidatesTags: ["bookshelf"]
         }),
+        getUser: builder.query({
+            query: () => `/users/`,
+            providesTags: ["profile"]
+        }),
+        updateUserProfile: builder.mutation({
+            query: ({ ...patch }) => ({
+                url: `/users/profile`,
+                method: 'PATCH',
+                body: patch,
+            }),
+            invalidatesTags: ["profile"]
+        }),
     }),
 })
 
