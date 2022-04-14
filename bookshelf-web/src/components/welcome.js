@@ -13,6 +13,7 @@ function Welcome(props) {
         const account = {
             userName: event.target.formBasicEmail.value,
             password: event.target.formBasicPassword.value,
+            displayName: event.target.formFirstName.value,
             firstName: event.target.formFirstName.value,
             lastName: event.target.formLastName.value
         }

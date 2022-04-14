@@ -6,7 +6,7 @@ import { useGetLibraryQuery } from "../services/BookshelfApi";
 import ErrorView from "./errorView";
 import { Auth } from "aws-amplify";
 
-function Home(props) {
+function Home() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showAddBookshelfModal, setShowsAddBookshelfModal] = useState(false);
@@ -22,7 +22,7 @@ function Home(props) {
         setShowsAddBookshelfModal(true);
     }
 
-    const bookshelfAddedCallback = async bookshelf => {
+    const bookshelfAddedCallback = async () => {
         setShowsAddBookshelfModal(false);
     }
 

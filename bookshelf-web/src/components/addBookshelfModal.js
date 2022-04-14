@@ -2,7 +2,6 @@ import { Button, Form, Modal, Spinner } from "react-bootstrap";
 import { useEffect } from 'react';
 import { useAddBookshelfMutation } from "../services/BookshelfApi";
 import ErrorView from './errorView';
-import { Auth } from "aws-amplify";
 const { v4 } = require('uuid');
 
 function AddBookshelfModal(props) {

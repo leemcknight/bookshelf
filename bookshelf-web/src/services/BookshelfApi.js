@@ -70,5 +70,7 @@ export const {
     useGetBooksQuery,
     useAddBookMutation,
     useAddBookshelfMutation,
-    useAddBookToBookshelfMutation
+    useAddBookToBookshelfMutation,
+    useGetUserQuery,
+    useUpdateUserProfileMutation
 } = BookshelfApi
