@@ -1,11 +1,13 @@
+import { useSelector } from 'react-redux';
 const { Container, Row, Col, Form, Button, Spinner } = require('react-bootstrap');
-const { useUpdateUserProfileMutation } = require('../../services/BookshelfApi');
+const { useUpdateUserProfileMutation, useGetUserProfileQuery } = require('../../services/BookshelfApi');
 const { ErrorView } = require('../errorView');
 const { SuccessView } = require('../successView');
 
 function UserProfile() {
-
+    const currentUser = useSelector((state) => state.userSession.currentUser);
     const [updateUserProfile, { isLoading, error, isSuccess, isError }] = useUpdateUserProfileMutation();
+    const { data: profile, isFetching } = useGetUserProfileQuery(null, { skip: !currentUser });
 
     function handleSubmit(e) {
         e.stopPropagation();
@@ -27,15 +29,15 @@ function UserProfile() {
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" controlId="email">
                             <Form.Label>Email address</Form.Label>
-                            <Form.Control type="email" placeholder="Enter email" />
+                            <Form.Control type="email" placeholder="Enter email" value={profile.email} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="displayName">
                             <Form.Label>Display Name</Form.Label>
-                            <Form.Control type="text" placeholder="Display Name" />
+                            <Form.Control type="text" placeholder="Display Name" value={profile.email} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="about">
                             <Form.Label>About Me</Form.Label>
-                            <Form.Control type="text" placeholder="About Me" />
+                            <Form.Control type="text" placeholder="About Me" value={profile.about} />
                         </Form.Group>
                         <Button variant="primary" type="submit">
                             Submit
@@ -45,7 +47,6 @@ function UserProfile() {
                 </Col>
             </Row>
         </Container>
-
     );
 }
 

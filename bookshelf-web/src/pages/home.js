@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { Container, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
-import AddBookshelfModal from "./addBookshelfModal";
+import AddBookshelfModal from "../components/addBookshelfModal";
 import { useGetLibraryQuery } from "../services/BookshelfApi";
-import ErrorView from "./errorView";
+import ErrorView from "../components/errorView";
 import { Auth } from "aws-amplify";
 
 function Home() {

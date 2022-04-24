@@ -1,12 +1,12 @@
 import { Container, Row, Col, Button, Form, Spinner } from 'react-bootstrap';
 import { useState } from 'react';
-import ErrorView from './errorView';
+import ErrorView from '../components/errorView';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
 import { login } from '../features/userSession';
 
-function BookshelfLogin() {
+function Login() {
 
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState();
@@ -54,7 +54,7 @@ function BookshelfLogin() {
                     <Col className='md-auto'>
                         <Button variant="primary" type="submit" className='mb-4' disabled={busy}>
                             Sign In
-                            {busy && <Spinner animation='border' variant='light' size='sm' />}
+                            {busy && <Spinner animation='border' className='ml-2' variant='light' size='sm' />}
                         </Button>
                     </Col>
                 </Row>
@@ -64,4 +64,4 @@ function BookshelfLogin() {
     );
 }
 
-export default BookshelfLogin;
+export default Login;

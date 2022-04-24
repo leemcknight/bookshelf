@@ -1,10 +1,10 @@
 import './App.css';
 import BookshelfHeader from './components/bookshelfHeader';
-import Welcome from './components/welcome';
-import VerifyEmail from './components/verifyEmail';
+import Welcome from './pages/welcome';
+import VerifyEmail from './pages/verifyEmail';
 import BookshelfView from './components/bookshelfView'
-import Home from './components/home';
-import BookshelfLogin from './components/bookshelfLogin';
+import Home from './pages/home';
+import Login from './pages/login';
 import { Routes, Route } from "react-router-dom";
 import UserProfile from './components/user/profile';
 import UserSettings from './components/user/settings';
@@ -15,7 +15,7 @@ function App() {
       <BookshelfHeader />
       <Routes>
         <Route exact path='/' element={<Welcome />} />
-        <Route exact path='/login' element={<BookshelfLogin />} />
+        <Route exact path='/login' element={<Login />} />
         <Route exact path='/home' element={<Home />} />
         <Route exact path='/confirm' element={<VerifyEmail />} />
         <Route exact path='/user/profile' element={<UserProfile />} />

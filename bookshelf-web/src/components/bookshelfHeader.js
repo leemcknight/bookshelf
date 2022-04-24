@@ -1,14 +1,16 @@
-import { Navbar, Nav, NavDropdown, Button, OverlayTrigger, Popover, Form, ButtonGroup } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown, Button, OverlayTrigger, Popover, Form, ButtonGroup, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBook, faBriefcase, faSignInAlt, faSlidersH, faUserAlt, faUserEdit, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faSignInAlt, faSlidersH, faUserAlt, faUserEdit, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useGetUserProfileQuery } from "../services/BookshelfApi";
 
 
 function BookshelfHeader() {
 
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.userSession.currentUser);
+  const { data: profile, isFetching } = useGetUserProfileQuery(null, { skip: !currentUser });
 
   var userPopover = (
     <Popover id="popover-basic">
@@ -56,13 +58,15 @@ function BookshelfHeader() {
           </Form>
         </Nav>
 
-        {currentUser ?
+        {profile ?
           <OverlayTrigger trigger="focus" placement="bottom" overlay={userPopover}>
-            <Button><FontAwesomeIcon className='mr-3' icon={faUserAlt} />{currentUser.payload.email}</Button>
+            <Button><FontAwesomeIcon className='mr-3' icon={faUserAlt} />{profile.result.displayName}</Button>
           </OverlayTrigger>
           :
           <OverlayTrigger trigger="focus" placement="bottom" overlay={userPopover}>
-            <Button>Login<FontAwesomeIcon className='ml-3' icon={faUserAlt} /></Button>
+            <Button>Login<FontAwesomeIcon className='ml-3' icon={faUserAlt} />
+              {isFetching && <Spinner animation="border" className='ml-2' variant="success" size="lg" />}
+            </Button>
           </OverlayTrigger>
         }
       </Navbar.Collapse>

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "lint": "npx eslint .  --ext .js"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +15,11 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "eslint": "^8.7.0"
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "jest": "^27.5.1"
   }
 }
