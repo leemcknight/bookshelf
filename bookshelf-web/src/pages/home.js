@@ -3,7 +3,7 @@ import { Container, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import AddBookshelfModal from "../components/addBookshelfModal";
 import { useGetLibraryQuery } from "../services/BookshelfApi";
-import ErrorView from "../components/errorView";
+import ErrorView from "../components/ErrorView";
 import { Auth } from "aws-amplify";
 
 function Home() {

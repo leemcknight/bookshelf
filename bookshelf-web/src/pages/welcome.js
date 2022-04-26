@@ -1,10 +1,12 @@
-import { Form, Container, Row, Col, Button, Jumbotron, Alert } from 'react-bootstrap';
+import { Form, Container, Row, Col, Jumbotron, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import SubmitButton from '../components/SubmitButton';
 const userManager = require('../util/userManager');
 const { useState } = require('react');
 
 function Welcome(props) {
     const [error, setError] = useState();
+    const [busy, setBusy] = useState(false);
     const navigate = useNavigate();
 
     async function createAccount(event) {
@@ -18,8 +20,10 @@ function Welcome(props) {
             lastName: event.target.formLastName.value
         }
         try {
+            setBusy(true);
             await userManager.createAccount(account);
             props.createAccountCallback(account);
+            setBusy(false);
             navigate('/confirm');
         } catch (error) {
             if (error.message) {
@@ -27,6 +31,7 @@ function Welcome(props) {
             } else {
                 setError(JSON.stringify(error));
             }
+            setBusy(false);
         }
 
     }
@@ -67,9 +72,7 @@ function Welcome(props) {
                     </Row>
                     <Row>
                         <Col>
-                            <Button variant="primary" type="submit" className='mb-4'>
-                                Create Account
-                            </Button>
+                            <SubmitButton title="CreateAccount" isLoading={busy} />
                         </Col>
                     </Row>
                 </Form>

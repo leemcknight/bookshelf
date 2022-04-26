@@ -1,10 +1,11 @@
-import { Container, Row, Col, Button, Form, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Form } from 'react-bootstrap';
 import { useState } from 'react';
-import ErrorView from '../components/errorView';
+import ErrorView from '../components/ErrorView';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
 import { login } from '../features/userSession';
+import SubmitButton from '../components/SubmitButton';
 
 function Login() {
 
@@ -52,10 +53,7 @@ function Login() {
                 </Row>
                 <Row>
                     <Col className='md-auto'>
-                        <Button variant="primary" type="submit" className='mb-4' disabled={busy}>
-                            Sign In
-                            {busy && <Spinner animation='border' className='ml-2' variant='light' size='sm' />}
-                        </Button>
+                        <SubmitButton title="Sign In" isLoading={busy} />
                     </Col>
                 </Row>
             </Form>

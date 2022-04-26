@@ -1,8 +1,8 @@
-import { Button, Form, Modal, Spinner } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import { useEffect } from 'react';
 import { useAddBookToBookshelfMutation } from "../services/BookshelfApi";
-import ErrorView from "./errorView";
-
+import ErrorView from "./ErrorView";
+import SubmitButton from './SubmitButton';
 
 function AddBookModal(props) {
 
@@ -50,11 +50,7 @@ function AddBookModal(props) {
                         <Form.Label>ISBN</Form.Label>
                         <Form.Control type="text" />
                     </Form.Group>
-
-                    <Button variant="primary" type="submit">
-                        Add Book
-                        {isLoading && <Spinner animation='border' variant='light' size='sm' />}
-                    </Button>
+                    <SubmitButton title="Add Book" isLoading={isLoading} />
                     <Button variant="primary" type="cancel" >
                         Cancel
                     </Button>

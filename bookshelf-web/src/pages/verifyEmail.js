@@ -1,6 +1,7 @@
 import { Form, Container, Row, Col, Button, Modal, Spinner, Alert } from "react-bootstrap";
-import { useNavigate, withRouter } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import SubmitButton from "../components/SubmitButton";
 const { signIn, confirmAccount } = require('../util/userManager');
 
 function VerifyEmail(props) {
@@ -85,7 +86,7 @@ function VerifyEmail(props) {
                                 <Form.Control type='input' placeholder='Confirmation Code' id='code' />
                             </Col>
                         </Form.Row>
-                        <Button type='submit' disabled={busy}>Verify {busy && <Spinner animation='border' size='sm' />}</Button>
+                        <SubmitButton title="Verify" isLoading={busy} />
                         <Button onClick='resendCode'>Resend Confirmation Code</Button>
                     </Form>
                 </Col>
@@ -97,7 +98,7 @@ function VerifyEmail(props) {
                             <Form.Control type='password' placeholder='Password' id='password' />
                         </Col>
                     </Form.Row>
-                    <Button type='submit' disabled={busy}>Login {busy && <Spinner animation='border' size='sm' />}</Button>
+                    <SubmitButton title="Login" isLoading={busy} />
                 </Form>
             </Modal>
         </Container>

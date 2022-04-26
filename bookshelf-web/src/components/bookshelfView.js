@@ -1,6 +1,6 @@
 import { Container, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { useState } from 'react';
-import ErrorView from './errorView';
+import ErrorView from './ErrorView';
 import AddBookModal from './addBookModal';
 import { Auth } from 'aws-amplify';
 import { useEffect } from 'react';

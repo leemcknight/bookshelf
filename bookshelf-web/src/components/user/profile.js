@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
 const { Container, Row, Col, Form, Button, Spinner } = require('react-bootstrap');
 const { useUpdateUserProfileMutation, useGetUserProfileQuery } = require('../../services/BookshelfApi');
-const { ErrorView } = require('../errorView');
-const { SuccessView } = require('../successView');
+const { ErrorView } = require('../ErrorView');
+const { SuccessView } = require('../SuccessView');
 
 function UserProfile() {
     const currentUser = useSelector((state) => state.userSession.currentUser);
