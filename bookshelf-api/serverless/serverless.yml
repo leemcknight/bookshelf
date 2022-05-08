@@ -94,6 +94,17 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+  getAuthor:
+    handler: lambda/handler.getAuthor
+      events:
+        - http:
+            cors: true
+            path: /authors/{authorId}
+            method: get          
+            authorizer:
+              type: COGNITO_USER_POOLS
+              authorizerId:
+                Ref: ApiGatewayAuthorizer      
 
 resources:
   Resources:

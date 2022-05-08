@@ -39,7 +39,7 @@ function Home() {
             {isFetching && <Spinner animation="border" variant="success" size="lg" />}
             {isError && <ErrorView error={error} />}
             <Row>
-                <Col>My Bookshelves</Col>
+                <Col className="text-left">My Bookshelves</Col>
                 <Col>
                     <Button onClick={handleAddBookshelf}>Add Bookshelf</Button>
                 </Col>
@@ -47,7 +47,7 @@ function Home() {
             {isSuccess &&
                 library.results.Items.map(b => (
                     <Row key={b.item_name}>
-                        <Col><Link to={`/library/bookshelf/${b.id}`}>{b.name}</Link></Col>
+                        <Col className="text-left"><Link to={`/library/bookshelf/${b.id}`}>{b.name}</Link></Col>
                         <Col>{b.bookCount}</Col>
                     </Row>
                 ))

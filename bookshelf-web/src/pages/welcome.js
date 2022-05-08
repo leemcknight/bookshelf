@@ -1,6 +1,7 @@
 import { Form, Container, Row, Col, Jumbotron, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import SubmitButton from '../components/SubmitButton';
+import Home from './home';
 const userManager = require('../util/userManager');
 const { useState } = require('react');
 
@@ -37,7 +38,7 @@ function Welcome(props) {
     }
 
     return (
-        <Jumbotron>
+        <Jumbotron style={{ backgroundImage: `url('bookshelf-home.jpg')`, backgroundSize: 'cover' }}>
             <Container className='rounded-lg shadow bg-light'>
                 <Row className='mt-3' hidden={!error}>
                     <Col><Alert variant='danger'>{error}</Alert></Col>

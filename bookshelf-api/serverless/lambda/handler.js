@@ -1,6 +1,7 @@
 'use strict'
 const bookshelf = require('./bookshelf.js')
 const profile = require('./profile')
+const author = require('./author')
 
 const BASE_HEADERS = {
     statusCode: 200,
@@ -110,6 +111,16 @@ module.exports.getUserProfile = async event => {
     try {
         const response = await profile.getUserProfile(userId)
         return buildSingletonResponse(response)
+    } catch (e) {
+        return buildErrorResponse(e)
+    }
+}
+
+module.exports.getAuthor = async event => {
+    try {
+        const authorId = event.pathParameters.authorId;
+        const response = await author.getAuthor(authorId);
+        return buildSingletonResponse(response);
     } catch (e) {
         return buildErrorResponse(e)
     }
