@@ -1,0 +1,138 @@
+service: bookshelf-api
+# app and org for use with dashboard.serverless.com
+app: bookshelf-api-app
+org: leemcknight
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: '3'
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-west-2
+  lambdaHashingVersion: 20201221
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:*"
+      Resource: "*"    
+functions:
+  getLibrary:
+    handler: serverless/handler.getLibrary
+    events:
+      - http:
+          cors: true
+          path: /users/library
+          method: get          
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer     
+  getBooksInBookshelf:
+    handler: serverless/handler.getBooks
+    events:
+      - http:
+          cors: true
+          path: /users/library/bookshelf/{bookshelfId}
+          method: get
+          request: 
+            parameters: 
+              paths:                 
+                bookshelfId: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer      
+  addUser:
+    handler: serverless/handler.addUser    
+  getUserProfile:
+    handler: serverless/handler.getUserProfile
+    events:
+      - http:
+          cors: true
+          path: /users/profile
+          method: get          
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer      
+  updateUserProfile:
+    handler: serverless/handler.updateUserProfile
+    events:
+      - http:
+          cors: true
+          path: /users/profile
+          method: patch          
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer      
+  addBookshelf:
+    handler: serverless/handler.addBookshelf
+    events:
+      - http:
+          cors: true
+          path: /users/library
+          method: post          
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  addBookToBookshelf:
+    handler: serverless/handler.addBookToBookshelf
+    events:
+      - http:
+          cors: true
+          path: /users/library/bookshelf/{bookshelfId}
+          method: post
+          request: 
+            parameters: 
+              paths:                 
+                bookshelfId: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  getAuthor:
+    handler: serverless/handler.getAuthor
+    events:
+      - http:
+          cors: true
+          path: /authors/{authorId}
+          method: get          
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer      
+
+resources:
+  Resources:
+    ApiGatewayAuthorizer:
+        Type: AWS::ApiGateway::Authorizer
+        Properties:
+            Name: CognitoUserPool
+            Type: COGNITO_USER_POOLS
+            IdentitySource: method.request.header.Authorization
+            RestApiId:
+                Ref: ApiGatewayRestApi
+            ProviderARNs:
+                - Fn::GetAtt:
+                    - BookshelfPool
+                    - Arn
+    BookshelfPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: bookshelf-pool
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 8
+        UsernameAttributes:
+          - email
+        Schema:
+          - AttributeDataType: String
+            Name: email
+            Required: false
