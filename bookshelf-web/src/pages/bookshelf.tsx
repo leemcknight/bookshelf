@@ -1,6 +1,6 @@
 // @flow
 
-import { Container, Row, Col, Button, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Button, Spinner, Table } from 'react-bootstrap';
 import { useState } from 'react';
 import * as React from "react";
 import ErrorView from '../components/ErrorView';
@@ -42,19 +42,26 @@ export default function Bookshelf(): JSX.Element {
 
     return (
         <Container>
-            {isFetching && <Spinner animation="border" variant="success" size="sm" />}
+
             {isError && <ErrorView error={error} />}
 
             <Row><Col><Button onClick={handleAddBook}>Add Book</Button></Col></Row>
-            {isSuccess &&
-                bookshelf.books.map((book: TBook) => (
-                    <Row key={book.isbn}>
-                        <Col>{book.author}</Col>
-                        <Col>{book.title}</Col>
-                        <Col>{book.rating}</Col>
-                    </Row>
-                ))
-            }
+            <Row>
+                <Table borderless className='justify-content-start'>
+                    <thead><tr><th>ISBN</th><th>Author</th><th>Title</th><th>Rating</th></tr></thead>
+                    <tbody>
+                        {isSuccess && bookshelf.books.map(book => (
+                            <tr>
+                                <td>{book.isbn}</td>
+                                <td>{book.author}</td>
+                                <td>{book.title}</td>
+                                <td>{book.rating}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            </Row>
+            {isFetching && <Spinner animation="border" variant="success" size="sm" />}
             <AddBookModal show={showAddBookModal} bookAddedCallback={bookAddedCallback} bookshelfId={bookshelfId!} />
         </Container >
     )

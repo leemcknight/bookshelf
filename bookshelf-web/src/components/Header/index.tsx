@@ -1,6 +1,3 @@
-
-// @flow
-
 import { Navbar, Nav, NavDropdown, Button, OverlayTrigger, Popover, Form, ButtonGroup, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignInAlt, faSlidersH, faUserAlt, faUserEdit, faUserPlus } from '@fortawesome/free-solid-svg-icons'
@@ -9,11 +6,12 @@ import { useSelector } from 'react-redux';
 import { useGetUserProfileQuery } from "../../services/BookshelfApi";
 import * as React from 'react';
 import { RootState } from "../../store";
+import { useAppSelector } from "../../hooks";
 
 function Header(): JSX.Element {
 
     const navigate = useNavigate();
-    const currentUser = useSelector((state: RootState) => state.userSession).identity;
+    const currentUser = useAppSelector(state => state.userSession);
     const skip = currentUser ?? true;
     const { data: profile, isFetching } = useGetUserProfileQuery({ skip });
 

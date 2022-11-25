@@ -35,16 +35,16 @@ export default function Login(): JSX.Element {
         const username = event.currentTarget.elements.username.value;
         const password = event.currentTarget.elements.password.value;
         setBusy(true);
-        try {
-            const user = await signIn(username, password);
-            //const user = await Auth.currentAuthenticatedUser();
 
-            dispatch(login({ userName: "asdfasdf" }));
-            navigate('/home');
-        } catch (error: any) {
-            setError(error);
-            setBusy(false);
-        }
+        signIn(username, password)
+            .then(user => user.getUsername())
+            .then(userName => dispatch(login(userName)))
+            .then(() => navigate('/home'))
+            .catch(error => {
+                setError(error);
+                setBusy(false);
+            }
+            )
     }
 
     return (
