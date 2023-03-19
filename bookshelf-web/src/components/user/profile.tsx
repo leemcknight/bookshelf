@@ -1,15 +1,19 @@
 import { useSelector } from 'react-redux';
 import * as React from 'react';
 import { RootState } from '../../store';
+import { useAppSelector } from '../../hooks';
+import { ThemedCard } from '../ThemedCard';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserEdit } from '@fortawesome/free-solid-svg-icons';
 const { Container, Row, Col, Form, Button, Spinner } = require('react-bootstrap');
 const { useUpdateUserProfileMutation, useGetUserProfileQuery } = require('../../services/BookshelfApi');
 const { ErrorView } = require('../ErrorView');
 const { SuccessView } = require('../SuccessView');
 
 interface FormElements extends HTMLFormControlsCollection {
-    email: string,
-    displayName: string,
-    about: string
+    email: HTMLInputElement,
+    displayName: HTMLInputElement,
+    about: HTMLInputElement
 }
 
 interface UserProfileFormElement extends HTMLFormElement {
@@ -17,23 +21,24 @@ interface UserProfileFormElement extends HTMLFormElement {
 }
 
 function UserProfile(): JSX.Element {
-    const currentUser = useSelector((state: RootState) => state.userSession);
+    const currentUser = useAppSelector(state => state.userSession)
     const [updateUserProfile, { isLoading, error, isSuccess, isError }] = useUpdateUserProfileMutation();
     const { data: profile, isFetching, isSuccess: profileRetrievalSuccess } = useGetUserProfileQuery({ skip: !currentUser });
 
     function handleSubmit(e: React.FormEvent<UserProfileFormElement>) {
         e.stopPropagation();
         e.preventDefault();
+        const elements = e.currentTarget.elements
         const profile = {
-            email: e.currentTarget.email,
-            displayName: e.currentTarget.displayName,
-            about: e.currentTarget.about
+            email: elements.email.value,
+            displayName: elements.displayName.value,
+            about: elements.about.value
         }
         updateUserProfile(profile);
     }
 
     return (
-        <Container>
+        <ThemedCard title="User Profile" icon={<FontAwesomeIcon icon={faUserEdit} />}>
             {isError && <ErrorView error={error} />}
             {isSuccess && <SuccessView message="Successfully updated profile." />}
             {isFetching && <Spinner animation="border" variant="success" size="sm" />}
@@ -61,7 +66,7 @@ function UserProfile(): JSX.Element {
                     </Col>
                 </Row>
             }
-        </Container>
+        </ThemedCard>
     );
 }
 

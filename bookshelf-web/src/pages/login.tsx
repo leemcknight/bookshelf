@@ -1,6 +1,6 @@
 // @flow
 
-import { Container, Row, Col, Form } from 'react-bootstrap';
+import { Container, Row, Col, Form, FloatingLabel } from 'react-bootstrap';
 import { useState } from 'react';
 import * as React from 'react';
 import ErrorView from '../components/ErrorView';
@@ -39,7 +39,7 @@ export default function Login(): JSX.Element {
         signIn(username, password)
             .then(user => user.getUsername())
             .then(userName => dispatch(login(userName)))
-            .then(() => navigate('/home'))
+            .then(() => navigate('/library'))
             .catch(error => {
                 setError(error);
                 setBusy(false);
@@ -48,24 +48,23 @@ export default function Login(): JSX.Element {
     }
 
     return (
-        <Container>
-            {error &&
-                <ErrorView error={error} />
-            }
-            <Form onSubmit={handleSignIn}>
-                <Row>
+        <Form onSubmit={handleSignIn}>
+            <Container>
+                {error &&
+                    <ErrorView error={error} />
+                }
+                <Row className="mb-3">
                     <Col>
-                        <Form.Group controlId="username">
-                            <Form.Control type="text" placeholder="Username" />
-                        </Form.Group>
+                        <FloatingLabel label="Username" controlId='username'>
+                            <Form.Control type="text" id='username' />
+                        </FloatingLabel>
                     </Col>
                 </Row>
-                <Row>
+                <Row className="mb-3">
                     <Col>
-                        <Form.Group controlId="password">
-                            <Form.Control type="password" placeholder="Password" />
-                        </Form.Group>
-
+                        <FloatingLabel label="Password" controlId='password'>
+                            <Form.Control type="password" placeholder="Password" id="password" />
+                        </FloatingLabel>
                     </Col>
                 </Row>
                 <Row>
@@ -73,8 +72,9 @@ export default function Login(): JSX.Element {
                         <SubmitButton title="Sign In" isLoading={busy} />
                     </Col>
                 </Row>
-            </Form>
-        </Container>
+
+            </Container>
+        </Form>
 
     );
 }

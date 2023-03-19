@@ -12,7 +12,7 @@ function ErrorView({ error }: TWorkingState): JSX.Element {
     return (
         <Container>
             <Row>
-                <Col><Alert variant='danger'>{error.message}</Alert></Col>
+                <Col><Alert variant='danger'>{error.error.message}</Alert></Col>
             </Row>
         </Container>
     )

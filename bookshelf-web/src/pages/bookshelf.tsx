@@ -1,6 +1,4 @@
-// @flow
-
-import { Container, Row, Col, Button, Spinner, Table } from 'react-bootstrap';
+import { Container, Row, Col, Button, Spinner, Table, Card } from 'react-bootstrap';
 import { useState } from 'react';
 import * as React from "react";
 import ErrorView from '../components/ErrorView';
@@ -10,6 +8,8 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetBooksQuery } from '../services/BookshelfApi';
 import { TBook } from '../types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 export default function Bookshelf(): JSX.Element {
     const [showAddBookModal, setShowAddBookModal] = useState(false);
@@ -42,27 +42,36 @@ export default function Bookshelf(): JSX.Element {
 
     return (
         <Container>
-
             {isError && <ErrorView error={error} />}
-
-            <Row><Col><Button onClick={handleAddBook}>Add Book</Button></Col></Row>
-            <Row>
-                <Table borderless className='justify-content-start'>
-                    <thead><tr><th>ISBN</th><th>Author</th><th>Title</th><th>Rating</th></tr></thead>
-                    <tbody>
-                        {isSuccess && bookshelf.books.map(book => (
-                            <tr>
-                                <td>{book.isbn}</td>
-                                <td>{book.author}</td>
-                                <td>{book.title}</td>
-                                <td>{book.rating}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            </Row>
-            {isFetching && <Spinner animation="border" variant="success" size="sm" />}
-            <AddBookModal show={showAddBookModal} bookAddedCallback={bookAddedCallback} bookshelfId={bookshelfId!} />
+            <Card>
+                <Card.Body>
+                    <Card.Title>
+                        <Row>
+                            <Col>
+                                Books
+                            </Col>
+                            <Col className="text-end">
+                                <Button size="sm" onClick={handleAddBook}><FontAwesomeIcon icon={faPlus} /> </Button>
+                            </Col>
+                        </Row>
+                    </Card.Title>
+                    <Table borderless striped size="sm">
+                        <thead><tr><th>ISBN</th><th>Author</th><th>Title</th><th>Rating</th></tr></thead>
+                        <tbody>
+                            {isSuccess && bookshelf.books.map(book => (
+                                <tr key={book.isbn}>
+                                    <td>{book.isbn}</td>
+                                    <td>{book.author}</td>
+                                    <td>{book.title}</td>
+                                    <td>{book.rating}</td>
+                                </tr>
+                            ))}
+                            {isFetching && <tr><td colSpan={4} align="center"><Spinner animation="border" /></td></tr>}
+                        </tbody>
+                    </Table>
+                </Card.Body>
+            </Card>
+            <AddBookModal onCanceled={() => setShowAddBookModal(false)} show={showAddBookModal} bookAddedCallback={bookAddedCallback} bookshelfId={bookshelfId!} />
         </Container >
     )
 }

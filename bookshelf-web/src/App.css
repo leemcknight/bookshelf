@@ -1,4 +1,7 @@
-.App {}
+.App {
+  --base-light: rgb(174, 192, 188);
+  --base-dark: darkslategrey;
+}
 
 .App-logo {
   height: 40vmin;
@@ -24,6 +27,11 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.navbar {
+  background: var(--base-light);
+  color: var(--base-dark);
 }
 
 @keyframes App-logo-spin {

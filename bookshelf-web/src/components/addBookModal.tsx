@@ -1,6 +1,4 @@
-// @flow
-
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { useEffect } from 'react';
 import * as React from "react";
 import { useAddBookToBookshelfMutation } from "../services/BookshelfApi";
@@ -11,32 +9,38 @@ import { TBook } from '../types';
 type TWorkingState = {
     show: boolean,
     bookshelfId: string,
-    bookAddedCallback: () => void
+    bookAddedCallback: () => void,
+    onCanceled: () => void,
 }
 
 interface FormElements extends HTMLFormControlsCollection {
-    title: string,
-    author: string,
-    isbn: string
+    title: HTMLInputElement,
+    author: HTMLInputElement,
+    isbn: HTMLInputElement
 }
 
 interface BookFormElement extends HTMLFormElement {
     readonly elements: FormElements
 }
 
-function AddBookModal({ show, bookshelfId, bookAddedCallback }: TWorkingState): JSX.Element {
+function AddBookModal({ show, bookshelfId, bookAddedCallback, onCanceled }: TWorkingState): JSX.Element {
     const [addBookToBookshelf, { isLoading, error, isSuccess, isError }] = useAddBookToBookshelfMutation();
 
     const handleAddBook = async (e: React.FormEvent<BookFormElement>) => {
         e.stopPropagation();
         e.preventDefault();
+        const elements = e.currentTarget.elements
         const book = {
-            title: e.currentTarget.title,
-            author: e.currentTarget.author,
-            isbn: e.currentTarget.isbn
+            title: elements.title.value,
+            author: elements.author.value,
+            isbn: elements.isbn.value
         } as TBook;
 
-        addBookToBookshelf({ bookshelfId, book });
+        const params = {
+            bookshelfId,
+            book
+        }
+        addBookToBookshelf(params);
     }
 
     useEffect(() => {
@@ -46,8 +50,8 @@ function AddBookModal({ show, bookshelfId, bookAddedCallback }: TWorkingState): 
     }, [isSuccess])
 
     return (
-        <Modal show={show}>
-            <Modal.Header>
+        <Modal show={show} centered onHide={onCanceled}>
+            <Modal.Header closeButton closeVariant="">
                 <Modal.Title>Add a book to your library</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -65,10 +69,7 @@ function AddBookModal({ show, bookshelfId, bookAddedCallback }: TWorkingState): 
                         <Form.Label>ISBN</Form.Label>
                         <Form.Control type="text" />
                     </Form.Group>
-                    <SubmitButton title="Add Book" isLoading={isLoading} />
-                    <Button variant="primary" type="cancel" >
-                        Cancel
-                    </Button>
+                    <Col className="float-end"><Button type="submit">Add Book</Button> </Col>
 
                 </Form>
             </Modal.Body>

@@ -3,26 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@aws-amplify/ui-react": "^2.1.9",
-    "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
-    "@fortawesome/react-fontawesome": "^0.1.14",
+    "@aws-amplify/ui-react": "^4.3.9",
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@reduxjs/toolkit": "^1.8.0",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.1",
-    "amazon-cognito-identity-js": "^4.5.12",
-    "aws-amplify": "^4.3.12",
+    "amazon-cognito-identity-js": "^6.1.2",
+    "aws-amplify": "^5.0.16",
     "aws-sdk": "^2.858.0",
+    "bootstrap": "^5.2.3",
     "fetch": "^1.1.0",
-    "react": "^17.0.1",
-    "react-bootstrap": "^1.5.1",
-    "react-dom": "^17.0.1",
-    "react-redux": "^7.2.6",
+    "fortawesome": "^0.0.1-security",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.7.2",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.4",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^6.2.2",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^5.0.1",
     "redux": "^4.1.2",
-    "uuid": "^8.3.2",
+    "uuid": "^9.0.0",
     "uuidv4": "^6.2.12",
     "web-vitals": "^1.1.0"
   },
@@ -34,6 +37,10 @@
     "prepublish": "npm run build"
   },
   "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true
+    },
     "extends": [
       "react-app",
       "react-app/jest"
@@ -55,6 +62,8 @@
     "@babel/cli": "^7.18.10",
     "@babel/core": "^7.18.10",
     "@babel/preset-flow": "^7.18.6",
-    "flow-bin": "^0.184.0"
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "process": "^0.11.10"
   }
 }

@@ -1,11 +1,13 @@
 // @flow
 
-import { Form, Container, Row, Col, Jumbotron, Alert } from 'react-bootstrap';
+import { Form, Container, Row, Col, Alert, FloatingLabel } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import SubmitButton from '../components/SubmitButton';
 import * as React from 'react';
 import { Auth } from 'aws-amplify';
 import { TUser } from '../types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ThemedCard } from '../components/ThemedCard';
 const { useState } = require('react');
 
 
@@ -64,37 +66,40 @@ function Welcome({ createAccountCallback }: TWorkingState): JSX.Element {
     }
 
     return (
-        <Jumbotron style={{ backgroundImage: `url('bookshelf-home.jpg')`, backgroundSize: 'cover' }}>
-            <Container className='rounded-lg shadow bg-light'>
-                <Row className='mt-3' hidden={!error}>
-                    <Col><Alert variant='danger'>{error}</Alert></Col>
-                </Row>
-                <Row className='align-center'>
-                    <Col><h3>Create an account to build your bookshelf</h3></Col>
-                </Row>
+
+        <Container>
+            <Row className='mt-3' hidden={!error}>
+                <Col><Alert variant='danger'>{error}</Alert></Col>
+            </Row>
+
+            <ThemedCard title='Create Account'>
+
                 <Form onSubmit={createAccount}>
                     <Row>
                         <Col>
-                            <Form.Group controlId="formFirstName">
-                                <Form.Control type="text" placeholder="First Name" />
-                            </Form.Group>
+
+                            <FloatingLabel controlId="formFirstName" label="First Name" className="mb-3">
+                                <Form.Control type="text" />
+                            </FloatingLabel>
                         </Col>
                         <Col>
-                            <Form.Group controlId="formLastName">
-                                <Form.Control type="text" placeholder="Last Name" />
-                            </Form.Group>
+                            <FloatingLabel controlId="formLastName" label="Last Name" className="mb-3">
+                                <Form.Control type="text" />
+                            </FloatingLabel>
                         </Col>
                     </Row>
                     <Row>
                         <Col>
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Control type="email" placeholder="Email" />
-                            </Form.Group>
+                            <FloatingLabel controlId="formBasicEmail" label="Email" className="mb-3">
+                                <Form.Control type="email" />
+                            </FloatingLabel>
                         </Col>
                         <Col>
-                            <Form.Group controlId="formBasicPassword">
-                                <Form.Control type="password" placeholder="Password" />
-                            </Form.Group>
+                            <FloatingLabel controlId="formBasicPassword" label="Password" className="mb-3">
+
+                                <Form.Control type="password" />
+
+                            </FloatingLabel>
                         </Col>
                     </Row>
                     <Row>
@@ -103,8 +108,9 @@ function Welcome({ createAccountCallback }: TWorkingState): JSX.Element {
                         </Col>
                     </Row>
                 </Form>
-            </Container>
-        </Jumbotron>
+            </ThemedCard>
+        </Container>
+
     )
 }
 

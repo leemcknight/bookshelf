@@ -49,10 +49,10 @@ export const BookshelfApi = createApi({
             providesTags: ["bookshelf"]
         }),
         addBook: builder.mutation<void, TBook>({
-            query: patch => ({
+            query: book => ({
                 url: `book`,
                 method: 'POST',
-                body: patch,
+                body: book,
             }),
         }),
         addBookshelf: builder.mutation<void, TBookshelf>({

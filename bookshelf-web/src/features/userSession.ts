@@ -1,4 +1,4 @@
-// @flow
+
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 

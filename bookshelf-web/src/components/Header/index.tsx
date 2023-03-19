@@ -1,77 +1,75 @@
-import { Navbar, Nav, NavDropdown, Button, OverlayTrigger, Popover, Form, ButtonGroup, Spinner } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown, Button, OverlayTrigger, Popover, Form, ButtonGroup, Spinner, Container, Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignInAlt, faSlidersH, faUserAlt, faUserEdit, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faSignInAlt, faSignOutAlt, faSlidersH, faUserAlt, faUserCircle, faUserEdit, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useGetUserProfileQuery } from "../../services/BookshelfApi";
 import * as React from 'react';
 import { RootState } from "../../store";
 import { useAppSelector } from "../../hooks";
+import { Auth } from "aws-amplify";
+import Login from "../../pages/login";
 
 function Header(): JSX.Element {
 
     const navigate = useNavigate();
     const currentUser = useAppSelector(state => state.userSession);
     const skip = currentUser ?? true;
-    const { data: profile, isFetching } = useGetUserProfileQuery({ skip });
+    const { data: profile } = useGetUserProfileQuery({ skip });
 
-    var userPopover = (
-        <Popover id="popover-basic">
-            <Popover.Content>
-                <ButtonGroup vertical>
-                    {skip && <Button onClick={() => navigate('/login')} variant='light'><FontAwesomeIcon className='ml-3' color="green" icon={faSignInAlt} />Login</Button>}
-                    {skip && <Button onClick={() => navigate('/signup')} variant='light'><FontAwesomeIcon className='ml-3' color="grey" icon={faUserPlus} />Sign Up</Button>}
-                    {!skip && <Button onClick={() => navigate('/user/profile')} variant='light'><FontAwesomeIcon className='ml-3' icon={faUserEdit} />Profile</Button>}
-                    {!skip && <Button onClick={() => navigate('/user/settings')} variant='light'><FontAwesomeIcon className='ml-3' icon={faSlidersH} />Account Settings</Button>}
-                    {!skip && <Button variant='light'>Logout</Button>}
-                </ButtonGroup>
-            </Popover.Content>
-        </Popover>
-    );
+    function signOut() {
+        Auth.signOut().then(() => navigate('/'))
+    }
 
+    function userTitle(): JSX.Element {
+        if (profile) {
+            return (<><FontAwesomeIcon icon={faUserCircle} /> {profile.displayName} </>)
+        }
+        return (<><FontAwesomeIcon icon={faUserCircle} /> Login</>)
+    }
     return (
-        <Navbar bg='light' className='mb-3 shadow'>
-            <Navbar.Brand href="#home">
+        <Navbar className='mb-3'>
+            <Navbar.Brand className="mx-3" href="/">
                 <img
                     src="/bookshelf.svg"
                     width="30"
                     height="30"
                     className="d-inline-block align-top"
                     alt="Bookshelf logo"
-                />Bookshelf.com
+                />Bookshelf
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav>
-                    <Nav.Link href="/home">My Library</Nav.Link>
-                    <Nav.Link href="#link">Browse</Nav.Link>
-                    <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                        <NavDropdown.Item><Link to='/home'>My Library</Link></NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                    </NavDropdown>
+                    <Nav.Link href="/library">My Library</Nav.Link>
                 </Nav>
-                <Nav className="mr-auto">
+                <Nav className="justify-content-end ml-3">
                     <Form className="d-flex">
                         <Form.Group controlId="search">
-                            <Form.Control type="text" placeholder="Search books" />
+                            <Form.Control size="sm" type="text" placeholder="Search books" />
                         </Form.Group>
                     </Form>
-                </Nav>
+                    {profile ? (
+                        <NavDropdown id="user" className="justify-content-end" title={<><FontAwesomeIcon icon={faUserCircle} /> {profile.displayName} </>}>
+                            <NavDropdown.Item onClick={() => navigate('/user/profile')}><FontAwesomeIcon className='ml-3' icon={faUserEdit} /> Profile</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => navigate('/user/settings')}><FontAwesomeIcon className='ml-3' icon={faSlidersH} /> Account Settings</NavDropdown.Item>
+                            <NavDropdown.Item onClick={signOut}><FontAwesomeIcon className='ml-3' icon={faSignOutAlt} /> Signout</NavDropdown.Item>
+                            <NavDropdown.Divider />
+                            <NavDropdown.ItemText>
+                                <NavDropdown.Header>
+                                    Signed in as: {profile.email}
+                                </NavDropdown.Header>
+                            </NavDropdown.ItemText>
+                        </NavDropdown>
+                    ) : (
+                        <NavDropdown title="Login">
+                            <Login />
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item onClick={() => navigate('/signup')}><FontAwesomeIcon className='ml-3' icon={faUserPlus} />Sign Up</NavDropdown.Item>
+                        </NavDropdown>
+                    )}
 
-                {profile ?
-                    <OverlayTrigger trigger="focus" placement="bottom" overlay={userPopover}>
-                        <Button><FontAwesomeIcon className='mr-3' icon={faUserAlt} />{profile.displayName}</Button>
-                    </OverlayTrigger>
-                    :
-                    <OverlayTrigger trigger="focus" placement="bottom" overlay={userPopover}>
-                        <Button>Login<FontAwesomeIcon className='ml-3' icon={faUserAlt} />
-                            {isFetching && <Spinner animation="border" className='ml-2' variant="success" size="sm" />}
-                        </Button>
-                    </OverlayTrigger>
-                }
+                </Nav>
             </Navbar.Collapse>
         </Navbar>
     );

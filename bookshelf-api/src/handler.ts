@@ -51,7 +51,7 @@ function getCognitoId(event: APIGatewayProxyEvent) {
     return event?.requestContext?.authorizer?.claims?.sub
 }
 
-module.exports.getLibrary = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export async function getLibrary(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     const userId = getCognitoId(event)
     const response = await getLibrary(userId)
     try {
@@ -61,7 +61,7 @@ module.exports.getLibrary = async (event: APIGatewayProxyEvent): Promise<APIGate
     }
 }
 
-module.exports.getBooks = async (event: APIGatewayProxyEvent) => {
+export async function getBooks(event: APIGatewayProxyEvent) {
     const userId = getCognitoId(event)
     const bookshelfId = event!.pathParameters!.bookshelfId
     const response = await getBooks(userId, bookshelfId!)
@@ -72,7 +72,7 @@ module.exports.getBooks = async (event: APIGatewayProxyEvent) => {
     }
 }
 
-module.exports.addBookshelf = async (event: APIGatewayProxyEvent) => {
+export async function addBookshelf(event: APIGatewayProxyEvent) {
     const body = JSON.parse(event.body!)
     const userId = getCognitoId(event)
     try {
@@ -83,7 +83,7 @@ module.exports.addBookshelf = async (event: APIGatewayProxyEvent) => {
     }
 }
 
-module.exports.addBookToBookshelf = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export async function addBookToBookshelf(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     const book = JSON.parse(event.body!)
     const userId = getCognitoId(event)
     const bookshelfId = event.pathParameters!.bookshelfId
@@ -95,7 +95,7 @@ module.exports.addBookToBookshelf = async (event: APIGatewayProxyEvent): Promise
     }
 }
 
-module.exports.addUser = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export async function addUser(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     const userId = getCognitoId(event)
     const user = JSON.parse(event.body!)
     try {
@@ -106,7 +106,7 @@ module.exports.addUser = async (event: APIGatewayProxyEvent): Promise<APIGateway
     }
 }
 
-module.exports.updateUserProfile = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export async function updateUserProfile(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     const userId = getCognitoId(event)
     const user = JSON.parse(event.body!)
     try {
@@ -118,7 +118,7 @@ module.exports.updateUserProfile = async (event: APIGatewayProxyEvent): Promise<
 
 }
 
-module.exports.getUserProfile = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export async function getUserProfile(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     const userId = getCognitoId(event)
     try {
         const response = await getUserProfile(userId)
@@ -128,7 +128,7 @@ module.exports.getUserProfile = async (event: APIGatewayProxyEvent): Promise<API
     }
 }
 
-module.exports.getAuthor = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export async function getAuthor(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     try {
         const authorId = event.pathParameters!.authorId;
         const response = await getAuthor(authorId!);

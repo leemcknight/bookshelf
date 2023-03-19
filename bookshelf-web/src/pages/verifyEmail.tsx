@@ -112,16 +112,16 @@ function VerifyEmail({ loginCallback, account }: TWorkingState): JSX.Element {
             <Row className='m-5'>
                 <Col>
                     <Form onSubmit={verify}>
-                        <Form.Row>
+                        <Row>
                             <Col>
                                 <Form.Control type='email' placeholder='Email Address' id='email' />
                             </Col>
-                        </Form.Row>
-                        <Form.Row>
+                        </Row>
+                        <Row>
                             <Col>
                                 <Form.Control type='input' placeholder='Confirmation Code' id='code' />
                             </Col>
-                        </Form.Row>
+                        </Row>
                         <SubmitButton title="Verify" isLoading={busy} />
                         <Button onClick={resendCode}>Resend Confirmation Code</Button>
                     </Form>
@@ -129,11 +129,11 @@ function VerifyEmail({ loginCallback, account }: TWorkingState): JSX.Element {
             </Row>
             <Modal show={confirmed}>
                 <Form onSubmit={login}>
-                    <Form.Row>
+                    <Row>
                         <Col>
                             <Form.Control type='password' placeholder='Password' id='password' />
                         </Col>
-                    </Form.Row>
+                    </Row>
                     <SubmitButton title="Login" isLoading={busy} />
                 </Form>
             </Modal>
